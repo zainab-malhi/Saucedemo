@@ -2,54 +2,54 @@
 const { test, expect } = require("@playwright/test");
 const exp = require("constants");
 const { Login } = require("../pages/login");
+import { ProductsList } from "../pages/ProductsList";
 
-test("has title", async ({ page }) => {
+test("products should be added in cart", async ({ page }) => {
   await page.goto("https://www.saucedemo.com/");
   let loginPage = new Login(page);
-  loginPage.login("standard_user", "secret_sauce");
+  await loginPage.login("standard_user", "secret_sauce");
+  await loginPage.clickLoginButton();
 
-  //const product = await page.locator("div[data-test='inventory-item']");
+  let productsListPage = new ProductsList(page);
+  await productsListPage.addToCart(0);
+  await productsListPage.addToCart(1);
+  await productsListPage.addToCart(2);
+  await productsListPage.addToCart(3);
+  await productsListPage.addToCart(4);
+  await productsListPage.addToCart(5);
 
-  // await page
-  //   .locator("button[data-test='add-to-cart-sauce-labs-backpack']")
-  //   .click();
-
-  // await page
-  //   .locator("button[data-test='add-to-cart-sauce-labs-bike-light']")
-  //   .click();
-  // await page
-  //   .locator("button[data-test='add-to-cart-sauce-labs-bolt-t-shirt']")
-  //   .click();
-  // await page
-  //   .locator("button[data-test='add-to-cart-sauce-labs-fleece-jacket']")
-  //   .click();
-  // await page
-  //   .locator("button[data-test='add-to-cart-sauce-labs-onesie']")
-  //   .click();
-  // await page
-  //   .locator(
-  //     "button[data-test='add-to-cart-test.allthethings()-t-shirt-(red)']"
-  //   )
-  //   .click();
-
-  //cart button
-  await page.locator("div#shopping_cart_container > a").click();
-
-  // check out button
-  await page.locator("button[data-test='checkout']").click();
-
-  //First name
-  await page.locator("input[data-test='firstName']").fill("John");
-
-  //Last name
-  await page.locator("input[data-test='lastName']").fill("Mark");
-
-  //Postal Code
-  await page.locator("input[data-test='postalCode']").fill("H3422A");
-
-  await page.locator("input[data-test='continue']").click();
-
-  //Finish Button
-  await page.locator("button[data-test='finish']").click();
-  //assertion
+  await expect(
+    await page.locator("span[data-test='shopping-cart-badge']").textContent()
+  ).toEqual("6");
 });
+
+// test("products are sorted A-Z", async ({ page }) => {
+//   await page.goto("https://www.saucedemo.com/");
+//   let loginPage = new Login(page);
+//   loginPage.login("standard_user", "secret_sauce");
+
+//   await expect(await page.locator("span[class='title']").textContent()).toEqual(
+//     "Products"
+//   );
+
+//   const products = await page.locator("div[data-test='inventory-item-price']");
+
+//   for (let i = 0; i < (await products.count()); i++) {
+//     console.log(await products.nth(i));
+//   }
+// });
+
+// test("products are sorted Z-A", async ({ page }) => {});
+
+test("products are sorted price Low to High", async ({ page }) => {
+  await page.goto("https://www.saucedemo.com/");
+  let loginPage = new Login(page);
+  await loginPage.login("standard_user", "secret_sauce");
+  await loginPage.clickLoginButton();
+
+  let productsListPage = new ProductsList(page);
+  await productsListPage.sortAscending();
+  await productsListPage.price();
+});
+
+// test("products are sorted price High to Low", async ({ page }) => {});

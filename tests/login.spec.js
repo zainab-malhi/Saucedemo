@@ -8,7 +8,8 @@ test("user can login with valid Username and valid Password", async ({
 }) => {
   await page.goto("https://www.saucedemo.com/");
   let loginPage = new Login(page);
-  loginPage.login("standard_user", "secret_sauce");
+  await loginPage.login("standard_user", "secret_sauce");
+  await loginPage.clickLoginButton();
 
   await expect(await page.locator("span[class='title']").textContent()).toEqual(
     "Products"
@@ -20,7 +21,8 @@ test("user can not login with valid Username and in-valid Password", async ({
 }) => {
   await page.goto("https://www.saucedemo.com/");
   let loginPage = new Login(page);
-  loginPage.login("standard_user", "secret");
+  await loginPage.login("standard_user", "secret");
+  await loginPage.clickLoginButton();
 
   await expect(
     await page
@@ -36,7 +38,8 @@ test("user can not login with in-valid Username and valid Password", async ({
 }) => {
   await page.goto("https://www.saucedemo.com/");
   let loginPage = new Login(page);
-  loginPage.login("standard", "secret_sauce");
+  await loginPage.login("standard", "secret_sauce");
+  await loginPage.clickLoginButton();
 
   await expect(
     await page
@@ -52,7 +55,8 @@ test("user can not login with in-valid Username and in-valid Password", async ({
 }) => {
   await page.goto("https://www.saucedemo.com/");
   let loginPage = new Login(page);
-  loginPage.login("standard", "secret");
+  await loginPage.login("standard", "secret");
+  await loginPage.clickLoginButton();
 
   await expect(
     await page
@@ -68,7 +72,8 @@ test("user can not login with invalid-Username and empty Password", async ({
 }) => {
   await page.goto("https://www.saucedemo.com/");
   let loginPage = new Login(page);
-  loginPage.login("sdfsfddsfsf", "");
+  await loginPage.login("sdfsfddsfsf", "");
+  await loginPage.clickLoginButton();
 
   await expect(
     await page
@@ -82,7 +87,8 @@ test("user can not login with empty Username and empty Password", async ({
 }) => {
   await page.goto("https://www.saucedemo.com/");
   let loginPage = new Login(page);
-  loginPage.login("", "");
+  await loginPage.login("", "");
+  await loginPage.clickLoginButton();
 
   await expect(
     await page
